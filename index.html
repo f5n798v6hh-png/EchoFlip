@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#030f25">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ECHOFLIP">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="color-scheme" content="dark">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="apple-touch-startup-image" href="./splash/iphone-390x844.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="./splash/iphone-393x852.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="./splash/iphone-430x932.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="./splash/iphone-414x896.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+  <meta name="description" content="ECHOFLIP by Følg Lykken — an installable, offline one-touch neon gravity arcade game.">
+  <title>ECHOFLIP — Følg Lykken</title>
+  <link rel="stylesheet" href="./assets/style.css">
+  <script type="module" src="./assets/game.js"></script>
+  <script defer src="./assets/pwa.js"></script>
+</head>
+<body>
+  <div id="brand-splash" aria-label="Følg Lykken presents ECHOFLIP" role="status">
+    <div class="splash-center">
+      <img src="./assets/folg-lykken-logo.jpg" alt="Følg Lykken" width="1774" height="887">
+      <div class="brand-presents">PRESENTS</div>
+      <div class="brand-game">ECHO<span>FLIP</span></div>
+      <div class="brand-progress" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
+  <div id="install-help" class="install-sheet" role="dialog" aria-modal="true" aria-labelledby="install-heading" hidden>
+    <div class="install-card">
+      <img src="./icons/apple-touch-icon.png" width="74" height="74" alt="ECHOFLIP home screen icon">
+      <h2 id="install-heading">Install ECHOFLIP</h2>
+      <p id="install-message"></p>
+      <p class="install-note">Your high scores stay on this device. Offline play is available after the first successful online visit.</p>
+      <button id="install-close" class="primary" type="button">GOT IT</button>
+    </div>
+  </div>
+  <main class="page">
+    <section class="game" id="game" aria-label="ECHOFLIP game">
+      <canvas id="board" width="780" height="1400" aria-label="Tap or press Space to flip gravity" tabindex="0"></canvas>
+      <div class="hud" id="hud" hidden>
+        <div class="top">
+          <div><div class="tiny">SCORE</div><div class="value" id="score">0</div></div>
+          <div class="logo">ECHO<span>FLIP</span></div>
+          <div class="right"><div class="tiny">BEST</div><div class="value" id="best">0</div></div>
+        </div>
+        <div class="score-row">
+          <span id="chain">CHAIN ×1</span>
+          <div class="meter-group"><div id="meter-label" class="tiny">OVERDRIVE 0%</div><div class="meter"><div id="meter-fill"></div></div></div>
+        </div>
+        <div id="notice" class="notice" aria-live="off"></div>
+        <div class="bottom"><span id="next">NEXT: WIDE</span><div class="hud-actions"><button id="music-ingame" type="button">♫ ON</button><button id="pause" type="button">Ⅱ PAUSE</button></div></div>
+      </div>
+      <div class="overlay" id="overlay">
+        <div class="chip" id="chip">ZERO MARGIN · v1.0</div>
+        <div class="eyebrow" id="eyebrow">ORIGINAL NEON ARCADE</div>
+        <h1>ECHO<span>FLIP</span></h1>
+        <p class="description" id="description">Fly right through narrow neon gates.<br>Tap to flip <b>UP ↕ DOWN</b> gravity.<br>One collision ends the run.</p>
+        <div class="difficulty" id="difficulty" aria-label="Choose difficulty">
+          <button type="button" data-level="flow">FLOW</button>
+          <button type="button" data-level="arcade" class="active">ARCADE</button>
+          <button type="button" data-level="expert">EXPERT</button>
+        </div>
+        <button type="button" id="primary" class="primary">PLAY NOW</button>
+        <button type="button" id="home" class="secondary" hidden>⌂ HOME · DIFFICULTY</button>
+        <button type="button" id="music" class="secondary small">♫ 8-BIT MUSIC ON</button>
+        <button type="button" id="install" class="secondary small">⬇ ADD TO HOME SCREEN</button>
+        <div class="foot">ORIGINAL CHIPTUNE · ONE TOUCH · NO ADS SERVED</div>
+      </div>
+      <div class="ad" id="ad" hidden role="dialog" aria-modal="true" aria-label="Example advertisement, no actual advertising">
+        <div class="ad-meta"><span>ADVERTISEMENT</span><span>DEMO · NOT A REAL AD</span></div>
+        <div class="ad-visual"><div class="diamond">◆</div><div class="headline">YOUR AD<br><em>HERE</em></div><p>Interstitial placement preview<br>No advertiser, tracking, or payment.</p><small>DEMO PLACEMENT ONLY</small></div>
+        <button id="ad-close" class="primary" type="button">CONTINUE TO RESULTS</button>
+        <div class="ad-foot">This is a mockup. No ad network is connected.</div>
+      </div>
+    </section>
+    <div class="caption">ECHOFLIP <span>FØLG LYKKEN EDITION · ZERO MARGIN</span></div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,49 @@
+name: Deploy ECHOFLIP to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "github-pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Expand ECHOFLIP app
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public
+          base64 --decode pwa-source.tar.gz.b64 | tar -xz -C public
+          test -s public/index.html
+          test -s public/assets/game.js
+          test -s public/assets/style.css
+          test -s public/assets/pwa.js
+          test -s public/assets/folg-lykken-logo.jpg
+          test -s public/icons/apple-touch-icon.png
+          test -s public/manifest.webmanifest
+          test -s public/sw.js
+          echo "All required ECHOFLIP assets present"
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload app as Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

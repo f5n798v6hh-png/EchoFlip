@@ -50,17 +50,6 @@ jobs:
           sed -i 's/echoflip-folg-lykken-v1.1/echoflip-folg-lykken-v1.2/g' public/sw.js
           printf 'ECHOFLIP / Følg Lykken. Copyright (c) 2026. This published package contains optimized assets. Previous releases may carry separate license terms; those earlier rights remain in effect.\n' > public/NOTICE.txt
           test -s public/assets/game.js
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-      - name: Upload optimized app as Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./public
-      - name: Deploy GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
       - name: Replace repository bundle with optimized release (original remains in Git history)
         shell: bash
         run: |
@@ -74,3 +63,14 @@ jobs:
             git commit -m "Store minified distribution instead of readable game source [skip ci]"
             git push origin HEAD:main
           fi
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload optimized app as Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

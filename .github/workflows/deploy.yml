@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Expand ECHOFLIP app
+      - name: Expand packaged game
         shell: bash
         run: |
           set -euo pipefail
@@ -37,13 +37,38 @@ jobs:
           test -s public/icons/apple-touch-icon.png
           test -s public/manifest.webmanifest
           test -s public/sw.js
-          echo "All required ECHOFLIP assets present"
+      - name: Optimize published JavaScript and CSS
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm exec --yes --package=esbuild@0.25.12 -- esbuild public/assets/game.js --minify --target=es2020 --outfile=public/assets/game.min.js
+          mv public/assets/game.min.js public/assets/game.js
+          npm exec --yes --package=esbuild@0.25.12 -- esbuild public/assets/pwa.js --minify --target=es2020 --outfile=public/assets/pwa.min.js
+          mv public/assets/pwa.min.js public/assets/pwa.js
+          npm exec --yes --package=esbuild@0.25.12 -- esbuild public/assets/style.css --minify --outfile=public/assets/style.min.css
+          mv public/assets/style.min.css public/assets/style.css
+          sed -i 's/echoflip-folg-lykken-v1.1/echoflip-folg-lykken-v1.2/g' public/sw.js
+          printf 'ECHOFLIP / Følg Lykken. Copyright (c) 2026. This published package contains optimized assets. Previous releases may carry separate license terms; those earlier rights remain in effect.\n' > public/NOTICE.txt
+          test -s public/assets/game.js
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-      - name: Upload app as Pages artifact
+      - name: Upload optimized app as Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Replace repository bundle with optimized release (original remains in Git history)
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf /tmp/echoflip-release.tar.gz -C public .
+          base64 -w0 /tmp/echoflip-release.tar.gz > pwa-source.tar.gz.b64
+          if ! git diff --quiet -- pwa-source.tar.gz.b64; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add pwa-source.tar.gz.b64
+            git commit -m "Store minified distribution instead of readable game source [skip ci]"
+            git push origin HEAD:main
+          fi
